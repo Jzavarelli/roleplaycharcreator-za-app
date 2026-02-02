@@ -1,41 +1,105 @@
-#Import and Library Management
-import sys;
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QMessageBox;
+#
+# ------------------------------------------------------------------
+#  
+# Character Creator Development - Project Dice Muncher
+#
+#
+#   Version:                  0.0.1
+#   Date Started:             02-02-2026
+#   GPL-3.0 License(s):       Open Source and Open Curated Content
+#   Development Curated By:   ZA Entertainment L.L.C.
+#   Developed By:             Jace Zavarelli
+#
+# ------------------------------------------------------------------
+#
 
-#QT Application Window Initialization Instance
-app = QApplication(sys.argv)
-window = QWidget() #-- Pass to all window variables to connect to this window, other windows will be defined likewise.
-window.setWindowTitle("Character TTRPG Creator")
-window.setGeometry(300, 300, 500, 750)
+# Import and Library Management
+import sys
+from pathlib import Path
+from PyQt5.QtWidgets import QApplication, QMenuBar, QMenu, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QMessageBox
+from PyQt5.QtGui import QIcon
 
-layout = QVBoxLayout()
+# * Core class for the Character application to hold the tables and items that will appear during execution, will preceed the application start interface, an exterior class on launch. 
+class CharMainPane(QWidget):
 
-#Example Label Text Field to interact with the QT Window
-label = QLabel("This is a Label", window)
-layout.addWidget(label)
-text_field = QLineEdit(window)
-text_field.setPlaceholderText("Enter Text Here...")
-layout.addWidget(text_field)
+    ## -------- INIT CALLS ----------------------------------------------------------------
 
-def submit_action():
-    user_input = text_field.text().strip()
+    # Initialization Class for the Applications initialized Window settings, Allows use of SELF from Super().
+    def __init__(self):
+        #-- Allows for the Base Class to be set properly while inheriting it. 
+        super().__init__()
+        icon_pathdir : str = r"..\assets\icons\dice_logo_icon.png"
+        self.setWindowIcon(QIcon(icon_pathdir))
+        self.setWindowTitle("Project Dice Muncher")
+        self.setGeometry(300, 300, 1000, 750)
 
-    if user_input:
-        QMessageBox.information(window, "Input Recieved", f"Hello, {user_input}")
-    else:
-        QMessageBox.warning(window, "No Input", "Please Enter Your Name.")
+        self.setStyleSheet(
+            """
+            QWidget {
+    
+            }
 
-## Submits that which is connected to the interface.
-submit_button = QPushButton("Submit", window)
-submit_button.clicked.connect(submit_action)
-layout.addWidget(submit_button)
+            QLabel {
+            
+            }
+            """
+        )
 
-## Quits out of the window view.
-quit_button = QPushButton("Quit", window)
-quit_button.clicked.connect(window.close)
-layout.addWidget(quit_button)
+        self._createCharMenuBar()
+        self.charMenu_ui()
 
-window.setLayout(layout)
+    def _createCharMenuBar(self):
+        menuCharBar = QMenuBar(self)
+        self.setMenuBar(menuCharBar)
 
-window.show()
-sys.exit(app.exec())
+        fileMenu = QMenu("&File", self)
+        self.menuCharBar.addMenu(self.fileMenu)
+
+        editMenu = self.menuCharBar.addMenu("&Edit")
+        helpMenu = self.menuCharBar.addMenu("&Help")
+
+    ## -------- WINDOW CALLS ----------------------------------------------------------------
+
+    # User Interface Class that Holds Widgets and QT Application Button Prompting.
+    def charMenu_ui(self):
+
+        #TODO - Setup the initial configuration and button structure of the main window and file menu bar heirarchy. 
+        mainpaneLayout = QVBoxLayout()
+
+        self.label = QLabel("This is a Label")
+        mainpaneLayout.addWidget(self.label)
+
+        self.text_field = QLineEdit()
+        self.text_field.setPlaceholderText("Enter Text Here...")
+        mainpaneLayout.addWidget(self.text_field)
+
+        self.submit_button = QPushButton("Submit")
+        self.submit_button.clicked.connect(self.submit_action)
+        mainpaneLayout.addWidget(self.submit_button)
+
+        self.quit_button = QPushButton("Quit")
+        self.quit_button.clicked.connect(self.close)
+        mainpaneLayout.addWidget(self.quit_button)
+
+        self.setLayout(mainpaneLayout)
+
+
+    ## -------- FUNCTION CALLS ----------------------------------------------------------------
+
+    # Submit Application (Reaction Script for when button is pressed).
+    def submit_action(self):
+        user_input = self.text_field.text().strip()
+
+        if user_input:
+            QMessageBox.information(self, "Input Recieved", f"Hello, {user_input}")
+        else:
+            QMessageBox.warning(self, "No Input", "Please Enter Your Name.")
+
+
+# TODO - Articulate to align with proper execution for Window Execution.
+# * Main Calling Method instantiating the CharMainPane for execution when ran.
+if __name__ == "__main__":
+    charTTRPGapp = QApplication(sys.argv)
+    window = CharMainPane()
+    window.show()
+    sys.exit(charTTRPGapp.exec())
