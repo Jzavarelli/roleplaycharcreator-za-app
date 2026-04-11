@@ -50,7 +50,7 @@ class CharMainPane(QWidget):
 
     def _createCharMenuBar(self):
         menuCharBar = QMenuBar(self)
-        self.setMenuBar(menuCharBar)
+        setMenuBar(menuCharBar)
 
         fileMenu = QMenu("&File", self)
         self.menuCharBar.addMenu(self.fileMenu)
