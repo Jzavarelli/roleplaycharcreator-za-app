@@ -12,4 +12,11 @@
 # ------------------------------------------------------------------
 
 #Import and Library Management
-import sys
+
+class Spells():
+
+    def __init__(self, name: str, components: list, level: int, char_class: str):
+        self.spell_name = name
+        self.spell_components = components
+        self.spell_level = level
+        self.spell_class = char_class
